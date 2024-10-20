@@ -1,0 +1,57 @@
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.logo {
+  margin-right: auto;  /* Logo alineado a la izquierda */
+}
+
+.logo a {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #e74c3c;
+  text-decoration: none;  /* Sin subrayado */
+}
+
+.logo a:hover {
+  color: #e74c3c;  /* El color no cambia al pasar el cursor */
+}
+
+
+.main-nav {
+  flex: 1;
+  text-align: center; /* Centrar el contenido de navegación */
+}
+
+.main-nav ul {
+  list-style: none;
+  display: inline-flex;
+  gap: 30px;
+}
+
+.main-nav ul li a {
+  font-size: 1.2em;
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.main-nav ul li a:hover {
+  color: #e74c3c;
+}
+
+.icon {
+  margin-right: 8px;
+  font-size: 1.5em;
+}

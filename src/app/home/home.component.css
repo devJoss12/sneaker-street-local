@@ -1,0 +1,129 @@
+/* Header */
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;   /* Hacemos que el header esté siempre en la parte superior */
+    top: 0;
+    width: 100%;
+    z-index: 1000;    /* Aseguramos que el header esté por encima de otros elementos */
+  }
+
+  .logo a {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #e74c3c;
+    text-decoration: none;
+  }
+
+  .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+
+  .main-nav ul li {
+    display: inline;
+  }
+
+  .main-nav ul li a {
+    font-size: 1.2em;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .main-nav ul li a:hover {
+    color: #e74c3c;
+  }
+
+  .user-options a {
+    font-size: 1em;
+    color: #333;
+    margin-left: 20px;
+    text-decoration: none;
+  }
+
+  .user-options a:hover {
+    color: #e74c3c;
+  }
+
+  .cart-icon {
+    font-size: 1.5em;
+  }
+
+  /* Ajustes generales */
+  body {
+    margin: 0;
+    padding-top: 80px;  /* Añadimos espacio para que el header fijo no cubra el contenido */
+  }
+  
+  .main-banner {
+    width: 100%;
+    height: auto; /* Elimina la altura fija */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    margin-bottom: 20px;
+    overflow: hidden;
+    max-height: 400px; /* Establece un máximo de altura */
+  }
+  
+  .banner-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 400px; /* Limita la altura máxima de la imagen */
+  }
+
+  
+  /* Contenido */
+  .home-container {
+    text-align: center;
+    margin-top: 40px;
+    padding: 0 20px; /* Añadimos algo de padding para evitar que el texto quede pegado a los bordes */
+  }
+  
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  p {
+    font-size: 1.2em;
+    color: #666;
+  }
+  
+  .button-container {
+    margin-top: 40px;
+  }
+  
+  button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-catalogo {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .btn-carrito {
+    background-color: #2ecc71;
+    color: white;
+  }
+  
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
