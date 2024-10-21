@@ -6,7 +6,11 @@ import { HeaderComponent } from '../header/header.component';
   selector: 'app-carrito',
   template: `
     <app-header></app-header>
-    <h2>Carrito de compras</h2>
+    
+    <section class="carrito-content" style="margin-top: 120px;">
+      <h2>Carrito de Compras</h2>
+      <!-- Aquí puedes agregar más contenido relacionado al catálogo -->
+    </section>
   `,
   imports: [HeaderComponent]
 })

@@ -6,5 +6,5 @@ import { CarritoComponent } from './carrito/carrito.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },  // Página principal
   { path: 'catalogo', component: CatalogoComponent },  // Página de catálogo
-  { path: 'carrito', component: CarritoComponent }  // Página del carrito
+  { path: 'carrito', component: CarritoComponent },  // Página del carrito
 ];
