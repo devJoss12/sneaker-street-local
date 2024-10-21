@@ -18,7 +18,7 @@ import { HeaderComponent } from '../header/header.component';
 
 
     <div class="home-container">
-      <h1>Bienvenido a Sneaker Street Local</h1>
+      <h1>Bienvenido a Sneaker Street</h1>
       <p>Explora nuestra colección exclusiva de sneakers o revisa tu carrito de compras.</p>
     </div>
   `,
