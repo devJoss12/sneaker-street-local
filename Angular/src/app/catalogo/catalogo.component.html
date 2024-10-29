@@ -1,3 +1,8 @@
+<!-- Popup de notificación del carrito -->
+<div *ngIf="mostrarPopup" class="popup-carrito">
+  <p>¡Tienes {{ cantidadCarrito }} {{ cantidadCarrito === 1 ? 'producto' : 'productos' }} en tu carrito!</p>
+</div>
+
 <section class="catalogo-content" style="margin-top: 40px; background-color: #f8f8f8; padding: 60px 0;">
   <h2 style="text-align: center; margin-bottom: 80px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 3em; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #333; position: relative; display: inline-block; left: 50%; transform: translateX(-50%);">
     <span style="background: linear-gradient(45deg, #ff3366, #ff6b3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; z-index: 1;">Catálogo de Sneakers</span>
@@ -46,4 +51,41 @@
       padding: 20px;
     }
   }
+
+
+/* Estilos para el popup del carrito */
+.popup-carrito {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(45deg, #ff3366, #ff6b3d);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+
 </style>

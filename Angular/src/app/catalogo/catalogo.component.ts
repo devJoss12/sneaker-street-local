@@ -13,7 +13,9 @@ import { CarritoService } from '../services/carrito.service'; // Importamos el s
 })
 export class CatalogoComponent implements OnInit {
   productos: any[] = [];
-  productosComprados: Set<number> = new Set(); // Guardar los productos comprados por ID
+  productosComprados: Set<number> = new Set();
+  cantidadCarrito: number = 0;
+  mostrarPopup: boolean = false;
 
   constructor(private catalogoService: CatalogoService, private carritoService: CarritoService) {}
 
@@ -26,12 +28,19 @@ export class CatalogoComponent implements OnInit {
 
   agregarAlCarrito(producto: any) {
     this.carritoService.addToCart(producto);
-    this.productosComprados.add(producto.id); // Marcar el producto como comprado
-    console.log('Producto agregado al carrito:', producto);
+    this.productosComprados.add(producto.id);
+    this.cantidadCarrito = this.carritoService.getItems().length; // Actualizar cantidad en el carrito
+    this.mostrarPopupCarrito();
   }
 
-  // Método para verificar si un producto ha sido comprado
   esProductoComprado(id: number): boolean {
     return this.productosComprados.has(id);
+  }
+
+  mostrarPopupCarrito() {
+    this.mostrarPopup = true;
+    setTimeout(() => {
+      this.mostrarPopup = false;
+    }, 2000); // Ocultar después de 2 segundos
   }
 }
