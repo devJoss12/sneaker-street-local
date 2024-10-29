@@ -23,9 +23,20 @@
         <h3 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #333;">Total:</h3>
         <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #ff3366;">${{ total | number: '1.2-2' }}</p>
       </div>
-      <button style="display: block; width: 100%; margin-top: 30px; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
+      <button (click)="mostrarFormularioPago()" style="display: block; width: 100%; margin-top: 30px; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
         Proceder al Pago
       </button>
+      
+      <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
+        <form id="payment-form">
+          <div id="card-element"><!-- Elemento de tarjeta será montado aquí --></div>
+          <button (click)="procesarPago($event)" style="display: block; width: 100%; margin-top: 20px; padding: 15px; background: linear-gradient(45deg, #4caf50, #81c784); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
+            Pagar Ahora
+          </button>
+        </form>
+      </div>
+      
+      
     </div>
     
     <ng-template #noItems>
