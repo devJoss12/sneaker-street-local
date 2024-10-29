@@ -1,20 +1,23 @@
-<section class="catalogo-content" style="margin-top: 120px;">
-  <h2 style="text-align: center; margin-bottom: 40px;">Catálogo de Sneakers</h2>
+<section class="catalogo-content" style="margin-top: 60px; background-color: #f8f8f8; padding: 60px 0;">
+  <h2 style="text-align: center; margin-bottom: 40px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 3em; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #333; position: relative; display: inline-block; left: 50%; transform: translateX(-50%);">
+    <span style="background: linear-gradient(45deg, #ff3366, #ff6b3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; z-index: 1;">Catálogo de Sneakers</span>
+    <span style="content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 3px; background: linear-gradient(45deg, #ff3366, #ff6b3d);"></span>
+  </h2>
 
-  <div *ngIf="productos.length > 0; else noProductos" class="product-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;">
-    <div class="product-card" *ngFor="let producto of productos" style="background-color: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease;">
-      <img [src]="producto.url_imagen" alt="{{ producto.nombre }}" class="product-image" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 15px;">
+  <div *ngIf="productos.length > 0; else noProductos" class="product-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto;">
+    <div class="product-card" *ngFor="let producto of productos" style="background-color: #fff; border: none; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+      <img [src]="producto.url_imagen" alt="{{ producto.nombre }}" class="product-image" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 15px; border-radius: 8px;">
       <div class="product-details" style="padding: 0 10px;">
-        <p class="product-color" style="font-size: 0.9em; color: #666; margin-bottom: 5px;">{{ producto.descripcion }}</p>
-        <h3 class="product-name" style="font-size: 1.4em; margin: 10px 0; font-weight: 600;">{{ producto.nombre }}</h3>
-        <p class="product-price" style="font-size: 1.2em; font-weight: bold; color: #333; margin-bottom: 15px;">${{ producto.precio }}</p>
-        <button class="buy-button" style="padding: 12px 20px; background-color: #000; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 1em; font-weight: 600; transition: background-color 0.3s ease;">Comprar</button>
+        <p class="product-color" style="font-size: 0.9em; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">{{ producto.descripcion }}</p>
+        <h3 class="product-name" style="font-size: 1.4em; margin: 10px 0; font-weight: 600; color: #333;">{{ producto.nombre }}</h3>
+        <p class="product-price" style="font-size: 1.2em; font-weight: bold; color: #ff3366; margin-bottom: 15px;">${{ producto.precio }}</p>
+        <button class="buy-button" style="padding: 12px 30px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 1em; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease; text-transform: uppercase; letter-spacing: 1px;">Comprar</button>
       </div>
     </div>
   </div>
 
   <!-- Mensaje si no hay productos -->
   <ng-template #noProductos>
-    <p style="text-align: center;">No hay productos disponibles.</p>
+    <p style="text-align: center; font-size: 1.2em; color: #666; font-style: italic;">No hay productos disponibles en este momento.</p>
   </ng-template>
 </section>
