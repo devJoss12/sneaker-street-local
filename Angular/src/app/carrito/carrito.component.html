@@ -1,18 +1,55 @@
 <app-header></app-header>
 
-<section class="carrito-content" style="margin-top: 120px;">
-  <h2>Carrito de Compras</h2>
-  <div *ngIf="items.length > 0; else noItems">
-    <div *ngFor="let item of items; let i = index" style="margin-bottom: 20px;">
-      <p><strong>{{ item.nombre }}</strong> - ${{ item.precio }}
-        <button (click)="eliminarProducto(i)" style="margin-left: 20px; background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+<section class="carrito-content" style="margin-top: 60px; padding: 60px 20px; background-color: #f8f8f8; min-height: calc(100vh - 120px);">
+  <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); padding: 40px;">
+    <h2 style="text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 2.5em; font-weight: 700; margin-bottom: 40px; color: #333; text-transform: uppercase; letter-spacing: 2px;">
+      <span style="background: linear-gradient(45deg, #ff3366, #ff6b3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Carrito de Compras</span>
+    </h2>
+    
+    <div *ngIf="items.length > 0; else noItems">
+      <div *ngFor="let item of items; let i = index" style="margin-bottom: 20px; padding: 20px; border-radius: 8px; background-color: #f9f9f9; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+        <div style="display: flex; align-items: center;">
+          <img [src]="item.url_imagen" alt="{{ item.nombre }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
+          <div>
+            <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; color: #333; margin: 0;">{{ item.nombre }}</p>
+            <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.1em; color: #ff3366; margin: 5px 0 0 0;">${{ item.precio | number: '1.2-2' }}</p>
+          </div>
+        </div>
+        <button (click)="eliminarProducto(i)" style="background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.9em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;">
           Eliminar
         </button>
-      </p>
+      </div>
+      <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eaeaea; display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #333;">Total:</h3>
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #ff3366;">${{ total | number: '1.2-2' }}</p>
+      </div>
+      <button style="display: block; width: 100%; margin-top: 30px; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
+        Proceder al Pago
+      </button>
     </div>
-    <h3>Total: ${{ total | number: '1.2-2' }}</h3>
+    
+    <ng-template #noItems>
+      <p style="text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; color: #666; font-style: italic; margin-top: 40px;">El carrito está vacío.</p>
+      <a href="catalogo" style="display: block; width: 200px; margin: 30px auto 0; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; text-align: center; text-decoration: none;">
+        Ver Catálogo
+      </a>
+    </ng-template>
   </div>
-  <ng-template #noItems>
-    <p>El carrito está vacío.</p>
-  </ng-template>
 </section>
+
+<style>
+  /* Estilos adicionales para mejorar la interactividad */
+  .carrito-content button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+  }
+  
+  @media (max-width: 768px) {
+    .carrito-content {
+      padding: 40px 10px;
+    }
+    .carrito-content > div {
+      padding: 20px;
+    }
+  }
+</style>
