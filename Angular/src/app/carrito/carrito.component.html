@@ -1,1 +1,18 @@
+<app-header></app-header>
 
+<section class="carrito-content" style="margin-top: 120px;">
+  <h2>Carrito de Compras</h2>
+  <div *ngIf="items.length > 0; else noItems">
+    <div *ngFor="let item of items; let i = index" style="margin-bottom: 20px;">
+      <p><strong>{{ item.nombre }}</strong> - ${{ item.precio }}
+        <button (click)="eliminarProducto(i)" style="margin-left: 20px; background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+          Eliminar
+        </button>
+      </p>
+    </div>
+    <h3>Total: ${{ total | number: '1.2-2' }}</h3>
+  </div>
+  <ng-template #noItems>
+    <p>El carrito está vacío.</p>
+  </ng-template>
+</section>
