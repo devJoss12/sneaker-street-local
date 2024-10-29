@@ -1,0 +1,91 @@
+<app-header></app-header>
+
+<section class="auth-content" style="margin-top: 60px; padding: 40px 20px; background-color: #f8f8f8; min-height: calc(100vh - 120px); display: flex; justify-content: center; align-items: center;">
+  <div style="max-width: 400px; width: 100%; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center;">
+    <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 2.5em; font-weight: 700; margin-bottom: 30px; color: #333; text-transform: uppercase; letter-spacing: 2px;">
+      <span style="background: linear-gradient(45deg, #ff3366, #ff6b3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Acceso</span>
+    </h2>
+
+    <form id="loginForm" style="display: block;">
+      <div style="margin-bottom: 20px;">
+        <input type="email" placeholder="Correo electrónico" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 30px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; transition: all 0.3s ease;">
+      </div>
+      <div style="margin-bottom: 20px;">
+        <input type="password" placeholder="Contraseña" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 30px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; transition: all 0.3s ease;">
+      </div>
+      <button type="submit" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.1em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">
+        Iniciar Sesión
+      </button>
+    </form>
+
+    <form id="registerForm" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <input type="text" placeholder="Nombre completo" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 30px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; transition: all 0.3s ease;">
+      </div>
+      <div style="margin-bottom: 20px;">
+        <input type="email" placeholder="Correo electrónico" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 30px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; transition: all 0.3s ease;">
+      </div>
+      <div style="margin-bottom: 20px;">
+        <input type="password" placeholder="Contraseña" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 30px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; transition: all 0.3s ease;">
+      </div>
+      <div style="margin-bottom: 20px;">
+        <input type="password" placeholder="Confirmar contraseña" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 30px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; transition: all 0.3s ease;">
+      </div>
+      <button type="submit" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.1em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">
+        Registrarse
+      </button>
+    </form>
+
+    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; color: #666;">
+      <a href="#" id="toggleAuth" style="color: #ff3366; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">¿No tienes una cuenta? Regístrate</a>
+    </p>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const title = document.querySelector('h2 span');
+
+    toggleAuth.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        toggleAuth.textContent = '¿No tienes una cuenta? Regístrate';
+        title.textContent = 'Acceso';
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        toggleAuth.textContent = '¿Ya tienes una cuenta? Inicia sesión';
+        title.textContent = 'Registro';
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Estilos adicionales para mejorar la interactividad */
+  .auth-content input:focus {
+    border-color: #ff3366;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.2);
+  }
+
+  .auth-content button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+  }
+
+  .auth-content a:hover {
+    color: #ff6b3d;
+  }
+
+  @media (max-width: 480px) {
+    .auth-content > div {
+      padding: 30px 20px;
+    }
+  }
+</style>
