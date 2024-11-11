@@ -1,0 +1,80 @@
+<app-header></app-header>
+
+<section class="inventario-content" style="background: linear-gradient(to right, #f8f8f8, #e8e8e8); padding: 60px 20px; min-height: calc(100vh - 200px);">
+  <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 2.5em; font-weight: 700; margin-bottom: 30px; color: #333; text-transform: uppercase; letter-spacing: 2px; text-align: center;">
+    <span style="background: linear-gradient(45deg, #ff3366, #ff6b3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Inventario de Productos</span>
+  </h2>
+
+  <div class="table-container" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); overflow: hidden;">
+    <div *ngIf="loading" class="loading-spinner" style="text-align: center; padding: 40px; color: #666; font-family: 'Helvetica Neue', Arial, sans-serif;">
+      <div style="display: inline-block; width: 50px; height: 50px; border: 3px solid #ff3366; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
+      <p style="margin-top: 20px; font-size: 18px;">Cargando inventario...</p>
+    </div>
+
+    <div *ngIf="error" class="error-message" style="text-align: center; padding: 20px; color: #fff; background-color: #ff3366; margin: 20px; border-radius: 8px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px;">
+      {{ error }}
+    </div>
+
+    <table *ngIf="!loading && !error" class="inventory-table" style="width: 100%; border-collapse: separate; border-spacing: 0; margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+      <thead>
+        <tr>
+          <th style="background-color: #f8f9fa; color: #333; font-weight: 600; padding: 15px; text-align: left; border-bottom: 2px solid #ff3366; text-transform: uppercase; letter-spacing: 1px;">ID</th>
+          <th style="background-color: #f8f9fa; color: #333; font-weight: 600; padding: 15px; text-align: left; border-bottom: 2px solid #ff3366; text-transform: uppercase; letter-spacing: 1px;">Imagen</th>
+          <th style="background-color: #f8f9fa; color: #333; font-weight: 600; padding: 15px; text-align: left; border-bottom: 2px solid #ff3366; text-transform: uppercase; letter-spacing: 1px;">Nombre</th>
+          <th style="background-color: #f8f9fa; color: #333; font-weight: 600; padding: 15px; text-align: left; border-bottom: 2px solid #ff3366; text-transform: uppercase; letter-spacing: 1px;">Descripción</th>
+          <th style="background-color: #f8f9fa; color: #333; font-weight: 600; padding: 15px; text-align: left; border-bottom: 2px solid #ff3366; text-transform: uppercase; letter-spacing: 1px;">Precio</th>
+          <th style="background-color: #f8f9fa; color: #333; font-weight: 600; padding: 15px; text-align: left; border-bottom: 2px solid #ff3366; text-transform: uppercase; letter-spacing: 1px;">Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos" style="transition: background-color 0.3s ease;">
+          <td style="padding: 15px; border-bottom: 1px solid #eee;">{{ producto.id }}</td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee;">
+            <img [src]="producto.url_imagen" [alt]="producto.nombre" class="producto-miniatura" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          </td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee; font-weight: 500;">{{ producto.nombre }}</td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee;">{{ producto.descripcion }}</td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee; font-weight: 600; color: #ff3366;">${{ producto.precio }}</td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee;">
+            <span [ngClass]="{'stock-bajo': producto.stock < 5}" style="color: #333; font-weight: normal;" [style.color]="producto.stock < 5 ? '#ff3366' : '#333'" [style.fontWeight]="producto.stock < 5 ? 'bold' : 'normal'">
+              {{ producto.stock }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<app-footer></app-footer>
+
+<style>
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .inventory-table tr:hover {
+    background-color: #f8f8f8;
+  }
+
+  @media (max-width: 768px) {
+    .inventario-content {
+      padding: 40px 10px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    .inventory-table th,
+    .inventory-table td {
+      padding: 10px;
+    }
+
+    .producto-miniatura {
+      width: 60px;
+      height: 60px;
+    }
+  }
+</style>

@@ -5,6 +5,7 @@ import { CarritoComponent } from './carrito/carrito.component';
 import { LoginComponent } from './login/login.component';
 import { TerminosCondicionesComponent } from './terminos-condiciones/terminos-condiciones.component';
 import { AvisoPrivacidadComponent } from './aviso-privacidad/aviso-privacidad.component';
+import { InventarioComponent } from './inventario/inventario.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },  // Página principal
@@ -14,4 +15,5 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'terminos', component: TerminosCondicionesComponent },
   { path: 'aviso', component: AvisoPrivacidadComponent },
+  { path: 'inventario', component: InventarioComponent },
 ];
