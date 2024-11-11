@@ -3,7 +3,7 @@
   <p>¡Tienes {{ cantidadCarrito }} {{ cantidadCarrito === 1 ? 'producto' : 'productos' }} en tu carrito!</p>
 </div>
 
-<section class="catalogo-content" style="margin-top: 40px; background-color: #f8f8f8; padding: 60px 0;">
+<section class="catalogo-content" style="margin-top: 40px; background-color: #f8f8f8; padding: 60px 0; max-width: 100%;">
   <h2 style="text-align: center; margin-bottom: 80px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 3em; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #333; position: relative; display: inline-block; left: 50%; transform: translateX(-50%);">
     <span style="background: linear-gradient(45deg, #ff3366, #ff6b3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; z-index: 1;">Catálogo de Sneakers</span>
     <span style="content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 3px; background: linear-gradient(45deg, #ff3366, #ff6b3d);"></span>
@@ -24,17 +24,20 @@
             'cursor': esProductoComprado(producto.id) ? 'not-allowed' : 'pointer'
           }"
           class="buy-button" style="padding: 12px 30px; color: white; border: none; border-radius: 30px; font-size: 1em; font-weight: 600; transition: all 0.3s ease, box-shadow 0.3s ease; text-transform: uppercase; letter-spacing: 1px;">
-          {{ esProductoComprado(producto.id) ? 'Agregado' : 'Comprar' }}
+          {{ esProductoComprado(producto.id) ? 'Agregado' : 'Agregar' }}
         </button>
       </div>
     </div>
   </div>
+
 
   <!-- Mensaje si no hay productos -->
   <ng-template #noHayProductos>
     <p style="text-align: center; font-size: 1.2em; color: #666; font-style: italic;">No hay productos disponibles en este momento.</p>
   </ng-template>
 </section>
+
+<app-footer></app-footer>
 
 <style>
   /* Estilo adicional para el botón de comprar en el catálogo */

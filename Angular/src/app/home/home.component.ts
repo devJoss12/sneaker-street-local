@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   standalone: true,
@@ -24,11 +25,12 @@ import { HeaderComponent } from '../header/header.component';
             background-color: #f4f4f4;
             color: #333;
             line-height: 1.6;
+            max-width:  100%;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 0px;
         }
         header {
             background-color: rgba(255, 255, 255, 0.95);
@@ -75,7 +77,7 @@ import { HeaderComponent } from '../header/header.component';
         }
         .hero-content {
             background-color: rgba(0, 0, 0, 0.6);
-            padding: 40px;
+            padding: 0px;
             border-radius: 8px;
         }
         .hero h1 {
@@ -189,14 +191,10 @@ import { HeaderComponent } from '../header/header.component';
         </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 SneakerStreet. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    <app-footer></app-footer>
 </body>
 </html>
   `,
-  imports: [HeaderComponent]
+  imports: [HeaderComponent, FooterComponent]
 })
 export class HomeComponent { }

@@ -5,13 +5,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StripeService } from '../services/stripe.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FooterComponent } from '../footer/footer.component';
 import Swal from 'sweetalert2';
 
 @Component({
   standalone: true,
   selector: 'app-carrito',
   templateUrl: './carrito.component.html',
-  imports: [HeaderComponent, CommonModule, HttpClientModule]
+  imports: [HeaderComponent, CommonModule, HttpClientModule, FooterComponent]
 })
 export class CarritoComponent implements OnInit, AfterViewChecked {
   items: any[] = [];

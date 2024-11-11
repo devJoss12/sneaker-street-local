@@ -3,12 +3,13 @@ import { CatalogoService } from '../services/catalogo.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CarritoService } from '../services/carrito.service'; // Importamos el servicio del carrito
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   standalone: true,
   selector: 'app-catalogo',
   templateUrl: './catalogo.component.html',  
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FooterComponent],
   providers: [CatalogoService],
 })
 export class CatalogoComponent implements OnInit {
