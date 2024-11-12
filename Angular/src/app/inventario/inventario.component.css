@@ -1,0 +1,123 @@
+.inventario-content {
+    padding: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  h2 {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(45deg, #ff3366, #ff6b3d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 10px 20px;
+  }
+  
+  .table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .loading-spinner {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+  }
+  
+  .spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid #ff3366;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+  }
+  
+  .error-message {
+    text-align: center;
+    padding: 20px;
+    color: #fff;
+    background-color: #ff3366;
+    margin: 20px;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .inventory-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+  }
+  
+  .inventory-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #ff3366;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .inventory-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .producto-miniatura {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .nombre {
+    font-weight: 500;
+  }
+  
+  .precio {
+    font-weight: 600;
+    color: #ff3366;
+  }
+  
+  .inventory-table tr:hover {
+    background-color: #f8f8f8;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @media (max-width: 768px) {
+    .inventario-content {
+      padding: 40px 10px;
+    }
+  
+    h2 {
+      font-size: 2em;
+    }
+  
+    .inventory-table th,
+    .inventory-table td {
+      padding: 10px;
+    }
+  
+    .producto-miniatura {
+      width: 60px;
+      height: 60px;
+    }
+  }

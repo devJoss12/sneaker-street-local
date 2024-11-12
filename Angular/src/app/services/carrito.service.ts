@@ -32,4 +32,9 @@ export class CarritoService {
   getTotal() {
     return this.total;
   }
+
+  clearCart() {
+    this.items = [];
+    this.total = 0;
+  }
 }

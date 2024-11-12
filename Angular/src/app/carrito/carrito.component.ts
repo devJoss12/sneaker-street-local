@@ -4,6 +4,7 @@ import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StripeService } from '../services/stripe.service';
+import { StockService } from '../services/stock.service'; 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from '../footer/footer.component';
 import Swal from 'sweetalert2';
@@ -24,6 +25,7 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
   constructor(
     private carritoService: CarritoService,
     private stripeService: StripeService,
+    private stockService: StockService,
     private http: HttpClient
   ) {}
 
@@ -117,29 +119,62 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
     const { token, error } = await this.stripe.createToken(this.card);
     if (error) {
       console.error('Error al crear el token', error);
+      Swal.fire({
+        title: 'Error en el pago',
+        text: 'Error al procesar la tarjeta. Por favor, verifica los datos.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+      });
     } else {
       console.log('Token creado:', token);
+      
+      // Preparar las actualizaciones de stock
+      const stockUpdates = this.stockService.prepareStockUpdates(this.items);
+
+      // Procesar el pago
       this.http.post('http://localhost:3000/charge', { token, amount: this.total * 100 })
-        .subscribe(response => {
-          console.log('Pago realizado:', response);
-          Swal.fire({
-            title: '¡Pago realizado con éxito!',
-            text: 'Tu compra ha sido procesada exitosamente. Gracias por comprar con nosotros.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-          }).then(() => {
-            // Llamar al método para generar el recibo XML
-            this.generarReciboXML();
-          });
-        }, error => {
-          console.error('Error al procesar el pago:', error);
-          Swal.fire({
-            title: 'Error al realizar el pago',
-            text: 'Hubo un problema al procesar tu pago. Por favor, intenta nuevamente.',
-            icon: 'error',
-            confirmButtonText: 'Reintentar'
-          });
-        });
+        .subscribe(
+          async (response) => {
+            try {
+              // Actualizar el stock después del pago exitoso
+              await this.stockService.updateStock(stockUpdates).toPromise();
+
+              // Mostrar mensaje de éxito
+              await Swal.fire({
+                title: '¡Pago realizado con éxito!',
+                text: 'Tu compra ha sido procesada exitosamente. Gracias por comprar con nosotros.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+
+              // Generar recibo XML
+              this.generarReciboXML();
+              
+              // Limpiar el carrito
+              this.carritoService.clearCart();
+              this.items = [];
+              this.total = 0;
+              
+            } catch (error) {
+              console.error('Error al actualizar el stock:', error);
+              Swal.fire({
+                title: 'Error en el procesamiento',
+                text: 'Tu pago fue procesado pero hubo un error al actualizar el inventario. Por favor, contacta con soporte.',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error => {
+            console.error('Error al procesar el pago:', error);
+            Swal.fire({
+              title: 'Error al realizar el pago',
+              text: 'Hubo un problema al procesar tu pago. Por favor, intenta nuevamente.',
+              icon: 'error',
+              confirmButtonText: 'Reintentar'
+            });
+          }
+        );
     }
   }
   

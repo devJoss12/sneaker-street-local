@@ -6,14 +6,44 @@ import { LoginComponent } from './login/login.component';
 import { TerminosCondicionesComponent } from './terminos-condiciones/terminos-condiciones.component';
 import { AvisoPrivacidadComponent } from './aviso-privacidad/aviso-privacidad.component';
 import { InventarioComponent } from './inventario/inventario.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },  // Página principal
   { path: 'login', component: LoginComponent },
-  { path: 'catalogo', component: CatalogoComponent },  // Página de catálogo
-  { path: 'carrito', component: CarritoComponent },  // Página del carrito
-  { path: 'login', component: LoginComponent },
+  { 
+    path: 'catalogo', 
+    component: CatalogoComponent,
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'carrito', 
+    component: CarritoComponent,
+    canActivate: [AuthGuard]
+  },
   { path: 'terminos', component: TerminosCondicionesComponent },
   { path: 'aviso', component: AvisoPrivacidadComponent },
-  { path: 'inventario', component: InventarioComponent },
+  { 
+    path: 'admin', 
+    component: AdminPanelComponent,
+    canActivate: [AdminGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'usuarios',
+        pathMatch: 'full'
+      },
+      {
+        path: 'usuarios',
+        component: UserManagementComponent
+      },
+      {
+        path: 'inventario',
+        component: InventarioComponent
+      }
+    ]
+  },
 ];

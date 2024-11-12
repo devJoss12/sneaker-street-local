@@ -1,0 +1,43 @@
+<div class="users-section">
+    <h3>Usuarios Registrados</h3>
+    
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando usuarios...</p>
+    </div>
+  
+    <div *ngIf="error" class="error-state">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="!loading && !error && users.length > 0" class="users-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Proveedor</th>
+            <th>Fecha de Registro</th>
+            <th>Último Ingreso</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.email }}</td>
+            <td>{{ user.provider }}</td>
+            <td>{{ user.created | date:'medium' }}</td>
+            <td>{{ user.signedIn | date:'medium' }}</td>
+            <td>
+              <button (click)="deleteUser(user.uid)" class="delete-btn">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="!loading && !error && users.length === 0" class="no-users-state">
+      <p>No hay usuarios registrados</p>
+    </div>
+  </div>

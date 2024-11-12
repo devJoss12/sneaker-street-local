@@ -2,7 +2,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth, GoogleAuthProvider, signInWithPopup, signOut, User, UserCredential } from '@angular/fire/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +12,27 @@ import { Router } from '@angular/router';
 export class AuthService {
   private auth = inject(Auth);
   private router = inject(Router);
+  private usersService = inject(UsersService);
   private user = new BehaviorSubject<User | null>(null);
   user$ = this.user.asObservable();
+  private lastAttemptedRoute: string | null = null;
+
+  private adminEmails: string[] = ['j24224068@gmail.com'];
 
   constructor() {
     this.auth.onAuthStateChanged(user => {
       this.user.next(user);
     });
+  }
+
+  isAdmin(): Observable<boolean> {
+    return this.user$.pipe(
+      map(user => user ? this.adminEmails.includes(user.email!) : false)
+    );
+  }
+
+  setLastAttemptedRoute(route: string) {
+    this.lastAttemptedRoute = route;
   }
 
   async loginWithGoogle(): Promise<UserCredential | null> {
@@ -26,7 +42,13 @@ export class AuthService {
       const result = await signInWithPopup(auth, provider);
       
       if (result.user) {
-        await this.router.navigate(['/catalogo']);
+        // Guardar información del usuario en Firestore
+        await this.usersService.saveUserLogin(result.user);
+        
+        // Navegar a la última ruta intentada o al catálogo por defecto
+        const redirectTo = this.lastAttemptedRoute || '/catalogo';
+        this.lastAttemptedRoute = null;
+        await this.router.navigate([redirectTo]);
         return result;
       }
       return null;

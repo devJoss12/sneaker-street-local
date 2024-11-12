@@ -1,0 +1,16 @@
+<div class="admin-panel-container">
+  <div class="admin-panel">
+    <h2>Panel de Administrador</h2>
+    
+    <div class="admin-options">
+      <button [class.active]="isRoute('/admin/inventario')" (click)="gestionarInventario()">
+        Gestionar Inventario
+      </button>
+      <button [class.active]="isRoute('/admin/usuarios')" (click)="gestionarUsuarios()">
+        Gestionar Usuarios
+      </button>
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

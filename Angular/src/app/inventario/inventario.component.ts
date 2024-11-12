@@ -2,18 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { InventarioService } from '../services/inventario.service';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   standalone: true,
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
-  imports: [CommonModule, HttpClientModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, HttpClientModule],
   providers: [InventarioService]
 })
-
 export class InventarioComponent implements OnInit {
   productos: any[] = [];
   loading: boolean = true;
