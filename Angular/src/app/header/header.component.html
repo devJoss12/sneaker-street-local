@@ -15,11 +15,25 @@
             <span class="icon" style="margin-right: 5px; font-size: 20px;">🛒</span> Ir al Carrito
           </a>
         </li>
-        <li>
-          <a routerLink="/login" style="color: #fff; text-decoration: none; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 500; align-items: center; transition: color 0.3s ease;">
-            <span class="icon" style="margin-right: 5px; font-size: 20px;">🔑</span> Iniciar sesión
-          </a>
-        </li>
+        <ng-container *ngIf="authService.user$ | async as user; else loginButton">
+          <div class="user-profile">
+            <div class="user-info">
+              <img [src]="user.photoURL" alt="Profile" class="profile-pic" *ngIf="user.photoURL">
+              <span class="user-name">{{ user.displayName }}</span>
+            </div>
+            <button class="logout-btn" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i> <!-- Si usas Font Awesome -->
+              Cerrar Sesión
+            </button>
+          </div>
+        </ng-container>
+        
+        <ng-template #loginButton>
+          <button class="login-btn" routerLink="/login">
+            <i class="fas fa-key"></i> <!-- Si usas Font Awesome -->
+            Iniciar sesión
+          </button>
+        </ng-template>
       </ul>
     </nav>
   </div>
