@@ -6,6 +6,7 @@
     <nav class="main-nav">
       <ul class="nav-list">
         <ng-container *ngIf="authService.user$ | async as user">
+          <!-- Mostrar Panel Admin solo para administradores -->
           <ng-container *ngIf="authService.isAdmin() | async">
             <li>
               <a routerLink="/admin" class="nav-link">
@@ -13,38 +14,55 @@
               </a>
             </li>
           </ng-container>
-        </ng-container>
-        <li>
-          <a routerLink="/catalogo" class="nav-link">
-            <span class="icon">👟</span> Ver Catálogo
-          </a>
-        </li>
-        <li>
-          <a routerLink="/carrito" class="nav-link">
-            <span class="icon">🛒</span> Ir al Carrito
-          </a>
-        </li>
-        <li>
-          <ng-container *ngIf="authService.user$ | async as user; else loginButton">
+
+          <!-- Mostrar Catálogo y Carrito solo para usuarios no administradores -->
+          <ng-container *ngIf="(authService.isAdmin() | async) === false">
+            <li>
+              <a routerLink="/catalogo" class="nav-link">
+                <span class="icon">👟</span> Ver Catálogo
+              </a>
+            </li>
+            <li>
+              <a routerLink="/carrito" class="nav-link">
+                <span class="icon">🛒</span> Ir al Carrito
+              </a>
+            </li>
+          </ng-container>
+
+          <!-- Perfil de usuario y botón de cerrar sesión -->
+          <li>
             <div class="user-profile">
               <div class="user-info">
-                <img [src]="user.photoURL" alt="Profile" class="profile-pic" *ngIf="user.photoURL">
-                <span class="user-name">{{ user.displayName }}</span>
+                <ng-container *ngIf="user.photoURL; else defaultAvatar">
+                  <img [src]="user.photoURL" 
+                       alt="Profile" 
+                       class="profile-pic"
+                       (error)="handleImageError($event)">
+                </ng-container>
+                <ng-template #defaultAvatar>
+                  <div class="default-avatar profile-pic">
+                    {{ user.email ? user.email.charAt(0).toUpperCase() : 'U' }}
+                  </div>
+                </ng-template>
+                <span class="user-name">{{ user.displayName || user.email }}</span>
               </div>
               <button class="logout-btn" (click)="logout()">
                 <i class="fas fa-sign-out-alt"></i>
                 Cerrar Sesión
               </button>
             </div>
-          </ng-container>
-          
-          <ng-template #loginButton>
-            <button class="login-btn" routerLink="/login">
+          </li>
+        </ng-container>
+
+        <!-- Botón de login para usuarios no autenticados -->
+        <ng-container *ngIf="!(authService.user$ | async)">
+          <li>
+            <button class="login-btn" routerLink="/auth">
               <i class="fas fa-key"></i>
-              Iniciar sesión
+              Ingresar
             </button>
-          </ng-template>
-        </li>
+          </li>
+        </ng-container>
       </ul>
     </nav>
   </div>

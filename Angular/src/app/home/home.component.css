@@ -1,21 +1,112 @@
-.main-banner {
-  width: 100%;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+  max-width: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0px;
+}
+
+.hero {
+  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  justify-content: center;
+  background-image: url('https://images.unsplash.com/photo-1556906781-9a412961c28c');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
 }
 
-.image-container {
-  width: 100%;
-  max-width: 1200px;  /* El contenedor no será más ancho de 1200px */
-  height: auto;  /* Dejamos que la altura sea automática */
-  overflow: hidden;  /* Ocultamos cualquier desbordamiento */
+.hero-content {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0px;
+  border-radius: 8px;
 }
 
-.banner-img {
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #ff4500;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e63900;
+}
+
+.featured-products {
+  padding: 80px 0;
+  background-color: white;
+}
+
+.featured-products h2 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
   width: 100%;
-  max-height: 400px;  /* Limitar la altura máxima de la imagen */
-  object-fit: contain;  /* La imagen se ajustará dentro del contenedor sin recortarse */
-  display: block;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-info h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  color: #ff4500;
+  font-weight: bold;
 }

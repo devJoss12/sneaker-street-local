@@ -21,4 +21,15 @@ export class HeaderComponent {
       console.error('Error al cerrar sesión:', error);
     }
   }
+
+  handleImageError(event: any) {
+    const target = event.target as HTMLImageElement;
+    if (target && target.parentElement) {
+      const initial = target.alt.charAt(0).toUpperCase();
+      const defaultAvatar = document.createElement('div');
+      defaultAvatar.className = 'default-avatar profile-pic';
+      defaultAvatar.textContent = initial;
+      target.parentElement.replaceChild(defaultAvatar, target);
+    }
+  }
 }

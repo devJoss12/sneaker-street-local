@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { CatalogoComponent } from './catalogo/catalogo.component';
 import { CarritoComponent } from './carrito/carrito.component';
-import { LoginComponent } from './login/login.component';
+import { AuthComponent } from './auth/auth.component';  // Cambiamos el import
 import { TerminosCondicionesComponent } from './terminos-condiciones/terminos-condiciones.component';
 import { AvisoPrivacidadComponent } from './aviso-privacidad/aviso-privacidad.component';
 import { InventarioComponent } from './inventario/inventario.component';
@@ -13,7 +13,8 @@ import { UserManagementComponent } from './admin/user-management/user-management
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },  // Página principal
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: AuthComponent },  // Cambiamos el componente
+  { path: 'auth', component: AuthComponent },
   { 
     path: 'catalogo', 
     component: CatalogoComponent,
