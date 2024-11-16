@@ -59,15 +59,10 @@ export class AuthService {
       const result = await signInWithPopup(auth, provider);
       
       if (result.user) {
-        // Guardar información del usuario en Firestore
         await this.usersService.saveUserLogin(result.user);
-        
-        // Verificar si el usuario es admin
         if (this.adminEmails.includes(result.user.email!)) {
-          // Si es admin, redirigir al panel de administración
           await this.router.navigate(['/admin']);
         } else {
-          // Si es usuario normal, mantener la lógica actual
           const redirectTo = this.lastAttemptedRoute || '/catalogo';
           this.lastAttemptedRoute = null;
           await this.router.navigate([redirectTo]);
@@ -87,35 +82,33 @@ export class AuthService {
 
   private async updateUserProfile(user: User, email: string) {
     const initial = email.charAt(0).toUpperCase();
-    const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F5', '#33FFF5']; // Colores para el avatar
+    const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F5', '#33FFF5']; 
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
-    // Crear un canvas para generar el avatar
+    
     const canvas = document.createElement('canvas');
     canvas.width = 100;
     canvas.height = 100;
     const ctx = canvas.getContext('2d');
     
     if (ctx) {
-      // Dibujar círculo de fondo
+      
       ctx.fillStyle = randomColor;
       ctx.beginPath();
       ctx.arc(50, 50, 50, 0, Math.PI * 2);
       ctx.fill();
       
-      // Agregar inicial
       ctx.fillStyle = 'white';
       ctx.font = 'bold 50px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(initial, 50, 50);
       
-      // Convertir a URL de datos
       const photoURL = canvas.toDataURL();
       
       try {
         await updateProfile(user, {
-          displayName: email.split('@')[0], // Usar la parte antes del @ como nombre
+          displayName: email.split('@')[0], 
           photoURL: photoURL
         });
       } catch (error) {
@@ -144,7 +137,6 @@ export class AuthService {
     try {
       const result = await signInWithEmailAndPassword(this.auth, email, password);
       if (result.user) {
-        // Si el usuario no tiene foto de perfil, la agregamos
         if (!result.user.photoURL) {
           await this.updateUserProfile(result.user, email);
         }
@@ -164,7 +156,6 @@ export class AuthService {
     }
   }
 
-  // Nuevo método para recuperar contraseña
   async resetPassword(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.auth, email);
@@ -174,7 +165,6 @@ export class AuthService {
     }
   }
 
-  // Método auxiliar para manejar errores de autenticación
   private handleAuthError(error: AuthError): void {
     let message = '';
     switch (error.code) {

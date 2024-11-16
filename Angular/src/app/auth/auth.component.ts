@@ -14,11 +14,24 @@ export class AuthComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  name: string = ''; 
+  address: string = ''; 
   isRegistering: boolean = false;
   errorMessage: string = '';
   isLoading: boolean = false;
 
   constructor(private authService: AuthService) {}
+
+  private validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  private validatePassword(password: string): boolean {
+    // Mínimo 8 caracteres, al menos una letra y un número
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordRegex.test(password);
+  }
 
   async login() {
     if (!this.email || !this.password) {
@@ -37,14 +50,23 @@ export class AuthComponent {
   }
 
   async register() {
-    if (!this.email || !this.password || !this.confirmPassword) {
+    if (!this.email || !this.password || !this.confirmPassword || !this.name || !this.address) {
       this.errorMessage = 'Por favor, complete todos los campos';
+      return;
+    }
+    if (!this.validateEmail(this.email)) {
+      this.errorMessage = 'Por favor, ingrese un correo electrónico válido';
+      return;
+    }
+    if (!this.validatePassword(this.password)) {
+      this.errorMessage = 'La contraseña debe tener al menos 8 caracteres, una letra y un número';
       return;
     }
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Las contraseñas no coinciden';
       return;
     }
+
     try {
       this.isLoading = true;
       this.errorMessage = '';
@@ -55,6 +77,7 @@ export class AuthComponent {
       this.isLoading = false;
     }
   }
+
 
   async loginWithGoogle() {
     try {
@@ -91,5 +114,7 @@ export class AuthComponent {
     this.email = '';
     this.password = '';
     this.confirmPassword = '';
+    this.name = ''; 
+    this.address = ''; 
   }
 }

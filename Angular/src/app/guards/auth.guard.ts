@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
         if (user) {
           return true;
         } else {
-          // Guardar la ruta intentada
           this.authService.setLastAttemptedRoute(route.url.join('/'));
           return this.router.createUrlTree(['/login']);
         }
