@@ -20,14 +20,12 @@ export class StockService {
   }
 
   prepareStockUpdates(cartItems: any[]): Array<{id: number, quantity: number}> {
-    // Agrupa los items por ID y cuenta las cantidades
     const updates = cartItems.reduce((acc: { [key: string]: number }, item) => {
       const id = item.id;
       acc[id] = (acc[id] || 0) + 1;
       return acc;
     }, {});
 
-    // Convierte el objeto agrupado en un array de actualizaciones
     return Object.entries(updates).map(([id, quantity]) => ({
       id: parseInt(id),
       quantity: quantity

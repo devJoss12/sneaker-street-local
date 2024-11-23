@@ -1,4 +1,3 @@
-<!-- Popup de notificación del carrito -->
 <div *ngIf="mostrarPopup" class="popup-carrito">
   <p>¡Tienes {{ cantidadCarrito }} {{ cantidadCarrito === 1 ? 'producto' : 'productos' }} en tu carrito!</p>
 </div>
@@ -18,20 +17,18 @@
         <p class="product-price" style="font-size: 1.2em; font-weight: bold; color: #ff3366; margin-bottom: 15px;">${{ producto.precio }}</p>
         <button
           (click)="agregarAlCarrito(producto)"
-          [disabled]="esProductoComprado(producto.id)"
+          [disabled]="esProductoComprado(producto.id) || !tieneStock(producto)"
           [ngStyle]="{
-            'background': esProductoComprado(producto.id) ? 'gray' : 'linear-gradient(45deg, #ff3366, #ff6b3d)',
-            'cursor': esProductoComprado(producto.id) ? 'not-allowed' : 'pointer'
+            'background': getButtonBackground(producto),
+            'cursor': getButtonCursor(producto)
           }"
           class="buy-button" style="padding: 12px 30px; color: white; border: none; border-radius: 30px; font-size: 1em; font-weight: 600; transition: all 0.3s ease, box-shadow 0.3s ease; text-transform: uppercase; letter-spacing: 1px;">
-          {{ esProductoComprado(producto.id) ? 'Agregado' : 'Agregar' }}
+          {{ getButtonText(producto) }}
         </button>
       </div>
     </div>
   </div>
 
-
-  <!-- Mensaje si no hay productos -->
   <ng-template #noHayProductos>
     <p style="text-align: center; font-size: 1.2em; color: #666; font-style: italic;">No hay productos disponibles en este momento.</p>
   </ng-template>
@@ -40,7 +37,6 @@
 <app-footer></app-footer>
 
 <style>
-  /* Estilo adicional para el botón de comprar en el catálogo */
   .buy-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
@@ -55,8 +51,6 @@
     }
   }
 
-
-/* Estilos para el popup del carrito */
 .popup-carrito {
   position: fixed;
   top: 20px;

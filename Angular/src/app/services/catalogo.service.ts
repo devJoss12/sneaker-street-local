@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root' // Correctamente configurado para uso global
+  providedIn: 'root' 
 })
 export class CatalogoService {
   private apiUrl = 'http://localhost/sneaker_street_api/get_catalogo.php';

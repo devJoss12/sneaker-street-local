@@ -1,7 +1,63 @@
 <section class="inventario-content">
   <h2>
-    <span class="gradient-text">Inventario de Productos</span>
+    <span class="gradient-text">INVENTARIO DE PRODUCTOS</span>
   </h2>
+
+  <div class="actions-container">
+    <div class="button-wrapper">
+      <button class="btn-agregar" (click)="mostrarFormularioAgregar()">
+        <i class="fas fa-plus"></i> Agregar Nuevo Producto
+      </button>
+    </div>
+  </div>
+
+  <div class="form-container" *ngIf="mostrarFormulario">
+    <div class="form-card">
+      <h3 class="form-title">{{ modoEdicion ? 'Editar Producto' : 'Agregar Nuevo Producto' }}</h3>
+      <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="producto-form">
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" formControlName="nombre" 
+                [class.error]="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched">
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción:</label>
+          <textarea id="descripcion" formControlName="descripcion" rows="3"
+                  [class.error]="productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched">
+          </textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half-width">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" formControlName="precio" step="0.01"
+                  [class.error]="productoForm.get('precio')?.invalid && productoForm.get('precio')?.touched">
+          </div>
+
+          <div class="form-group half-width">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" formControlName="stock"
+                  [class.error]="productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="imagen">Imagen:</label>
+          <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="!productoForm.valid" class="btn-submit">
+            {{ modoEdicion ? 'Actualizar' : 'Agregar' }} Producto
+          </button>
+          <button type="button" (click)="resetForm()" class="btn-cancel">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="table-container">
     <div *ngIf="loading" class="loading-spinner">
@@ -17,11 +73,12 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Imagen</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Stock</th>
+          <th>IMAGEN</th>
+          <th>NOMBRE</th>
+          <th>DESCRIPCIÓN</th>
+          <th>PRECIO</th>
+          <th>STOCK</th>
+          <th>ACCIONES</th>
         </tr>
       </thead>
       <tbody>
@@ -33,12 +90,23 @@
           <td class="nombre">{{ producto.nombre }}</td>
           <td class="descripcion">{{ producto.descripcion }}</td>
           <td class="precio">${{ producto.precio }}</td>
-          <td>
-            <span [ngClass]="{'stock-bajo': producto.stock < 5}" 
-                  [style.color]="producto.stock < 5 ? '#ff3366' : '#333'"
-                  [style.fontWeight]="producto.stock < 5 ? 'bold' : 'normal'">
-              {{ producto.stock }}
-            </span>
+          <td [ngClass]="{'stock-bajo': producto.stock < 5}">{{ producto.stock }}</td>
+          <td class="acciones">
+            <button class="btn-editar" (click)="editarProducto(producto)">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-eliminar" (click)="eliminarProducto(producto.id!)">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+            <button 
+              class="btn-stock" 
+              (click)="marcarSinStock(producto.id!)"
+              [disabled]="producto.stock === 0"
+              [ngClass]="{'btn-stock-disabled': producto.stock === 0}"
+            >
+              <i class="fas fa-box"></i> 
+              {{ producto.stock === 0 ? 'Sin Stock' : 'Marcar Sin Stock' }}
+            </button>
           </td>
         </tr>
       </tbody>
