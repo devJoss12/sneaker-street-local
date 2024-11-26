@@ -41,10 +41,10 @@ export class StockService {
   }
 
   prepareStockUpdates(cartItems: any[]): Array<{id: number, quantity: number}> {
-    // Asegurarnos de que usamos la cantidad correcta de cada item del carrito
+    
     return cartItems.map(item => ({
       id: item.id,
-      quantity: item.cantidad || 1 // Si no existe cantidad, asumimos 1
+      quantity: item.cantidad || 1 
     }));
   }
 }

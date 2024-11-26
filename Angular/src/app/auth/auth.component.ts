@@ -91,7 +91,7 @@ export class AuthComponent {
   }
 
   async forgotPassword() {
-    this.errorMessage = ''; // Limpiamos el mensaje de error previo
+    this.errorMessage = ''; 
     
     if (!this.email || this.email.trim() === '') {
       this.errorMessage = 'Por favor, ingrese su correo electrónico';

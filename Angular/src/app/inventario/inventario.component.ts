@@ -75,11 +75,10 @@ export class InventarioComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.productoForm.valid) { // Solo verificamos el formulario base
+    if (this.productoForm.valid) { 
       try {
         let urlImagen = this.productoSeleccionado?.url_imagen || '';
         
-        // Si estamos en modo creación, requerimos la imagen
         if (!this.modoEdicion && !this.archivoSeleccionado) {
           this.mostrarError('Por favor, selecciona una imagen para el producto');
           return;
@@ -164,9 +163,9 @@ export class InventarioComponent implements OnInit {
       descripcion: producto.descripcion,
       precio: producto.precio,
       stock: producto.stock,
-      imagen: null // Reset the image field
+      imagen: null 
     });
-    this.archivoSeleccionado = null; // Reset the selected file
+    this.archivoSeleccionado = null; 
     this.mostrarFormulario = true;
   }
 
@@ -178,7 +177,6 @@ export class InventarioComponent implements OnInit {
     this.mostrarFormulario = false;
   }
 
-  // Actualizar el template para usar esta función
   esFormularioValido(): boolean {
     if (this.modoEdicion) {
       return this.productoForm.valid;

@@ -24,7 +24,6 @@ export interface UserRecord {
 export class UsersService {
   private firestore: Firestore = inject(Firestore);
 
-  // Método existente
   async saveUserLogin(user: any): Promise<void> {
     try {
       console.log('Guardando usuario:', user);
@@ -68,7 +67,6 @@ export class UsersService {
     }
   }
 
-  // Nuevo método para eliminar usuarios
   async deleteUser(uid: string): Promise<void> {
     try {
       const userRef = doc(this.firestore, 'users', uid);

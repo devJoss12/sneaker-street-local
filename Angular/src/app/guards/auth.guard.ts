@@ -1,4 +1,4 @@
-// src/app/guards/auth.guard.ts
+
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map, take } from 'rxjs';

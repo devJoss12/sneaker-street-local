@@ -30,7 +30,7 @@ import { EmailService } from '../services/email.service';
 export class CarritoComponent implements OnInit, AfterViewChecked {
   items: any[] = [];
   total: number = 0;
-  mostrarFormulario: boolean = false; // Mostrar u ocultar el formulario de pago
+  mostrarFormulario: boolean = false; 
   private stripe: any;
   private card: any;
   showConfirmationModal: boolean = false;
@@ -56,7 +56,6 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
       }
     });
     
-    // Inicializa Stripe
     try {
       console.log('Inicializando Stripe...');
       this.stripe = await this.stripeService.getStripe();
@@ -71,7 +70,6 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    // Configura el elemento de la tarjeta si el formulario está visible y aún no se ha montado el elemento
     if (this.mostrarFormulario && !this.card) {
       this.configurarElementoStripe();
     }
@@ -119,14 +117,12 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
     console.log('Estado del modal:', this.showConfirmationModal);
   }
 
-   // Añadir el método confirmarPedido
    async confirmarPedido() {
     this.showConfirmationModal = false;
     this.mostrarFormulario = true;
     await this.configurarElementoStripe();
   }
 
-  // Añadir el método cancelarConfirmacion
   cancelarConfirmacion() {
     this.showConfirmationModal = false;
   }
@@ -162,7 +158,7 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
   
     this.card = elements.create('card', {
       style: style,
-      hidePostalCode: false // Mostrar campo postal
+      hidePostalCode: false 
     });
   
     this.card.mount('#card-element');
@@ -174,7 +170,6 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
     event.preventDefault();
 
     try {
-      // Verificar stock antes del pago
       const stockAvailable = await this.stockService.checkStockAvailability(this.items).toPromise();
       
       if (!stockAvailable) {
@@ -206,7 +201,6 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
         return;
       }
 
-      // Preparar actualizaciones de stock
       const stockUpdates = this.stockService.prepareStockUpdates(this.items);
 
       this.http.post('http://localhost:3000/charge', {
@@ -221,7 +215,7 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
             const orderDate = this.emailService.formatDate(new Date());
             const reciboXML = this.generarReciboXML(orderNumber, orderDate);
 
-            console.log('XML generado:', reciboXML); // Verificación
+            console.log('XML generado:', reciboXML); 
 
             const orderDetails = {
               orderNumber,
@@ -229,13 +223,12 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
               total: this.total,
               userEmail: this.userEmail,
               date: orderDate,
-              reciboXML: reciboXML // Aseguramos que el XML se incluye
+              reciboXML: reciboXML 
             };
 
-            // Enviar correo con el XML
             this.emailService.sendOrderConfirmationWithReceipt(orderDetails).subscribe(
               async (response) => {
-                console.log('Respuesta del servidor:', response); // Verificación
+                console.log('Respuesta del servidor:', response); 
                 
                 await Swal.fire({
                   title: '¡Compra exitosa!',
@@ -248,12 +241,10 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
                   confirmButtonText: 'Aceptar'
                 });
                 
-                // Limpiar carrito
                 this.carritoService.clearCart();
                 this.items = [];
                 this.total = 0;
 
-                // Usar el Router para la navegación
                 this.router.navigate(['/catalogo']);
               },
               error => {
@@ -298,25 +289,21 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
   }
 
   async cargarProductosActualizados() {
-    // Actualizar stocks de productos en el carrito
     const productIds = this.items.map(item => item.id);
     try {
       const response = await this.http.post('http://localhost/sneaker_street_api/get_products_stock.php', { ids: productIds }).toPromise();
       const updatedProducts = response as any[];
       
-      // Actualizar cantidades si es necesario
       this.items = this.items.map(item => {
         const updatedProduct = updatedProducts.find(p => p.id === item.id);
         if (updatedProduct && item.cantidad > updatedProduct.stock) {
           item.cantidad = updatedProduct.stock;
-          // Actualizar el total
           this.carritoService.updateQuantity(this.items.indexOf(item), updatedProduct.stock);
         }
         item.stock = updatedProduct ? updatedProduct.stock : 0;
         return item;
       });
       
-      // Filtrar productos sin stock
       this.items = this.items.filter(item => item.stock > 0);
       this.total = this.carritoService.getTotal();
       
@@ -327,7 +314,6 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
           icon: 'info',
           confirmButtonText: 'Ir al catálogo'
         });
-        // Redirigir al catálogo
         window.location.href = '/catalogo';
       }
     } catch (error) {
@@ -342,14 +328,11 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
   }
   
   generarReciboXML(orderNumber: string, orderDate: string): string {
-    // Crear un documento XML
     const xmlDoc = document.implementation.createDocument('', '', null);
     
-    // Función helper para crear elementos con indentación
     const createElement = (parent: Element, name: string, content?: string, indent: number = 0) => {
         const spaces = '  '.repeat(indent);
         
-        // Añadir indentación como texto al elemento padre
         parent.appendChild(xmlDoc.createTextNode('\n' + spaces));
         
         const element = xmlDoc.createElement(name);
@@ -361,41 +344,33 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
         return element;
     };
     
-    // Crear el elemento raíz
     const recibo = xmlDoc.createElement('recibo');
     xmlDoc.appendChild(recibo);
     
-    // Formatear la fecha correctamente
     const formatearFecha = (fechaStr: string) => {
         try {
-            // Si la fecha ya viene en formato ISO, la usamos directamente
             if (fechaStr.includes('T')) {
                 return fechaStr;
             }
-            // Si no, creamos un objeto Date con la fecha actual
             const fecha = new Date();
             return fecha.toISOString();
         } catch (error) {
             console.error('Error al formatear fecha:', error);
-            return new Date().toISOString(); // Fecha actual como fallback
+            return new Date().toISOString(); 
         }
     };
 
     const fechaISO = formatearFecha(orderDate);
     createElement(recibo, 'fecha', fechaISO, 1);
     
-    // Añadir número de orden
     createElement(recibo, 'numero', orderNumber, 1);
     
-    // Añadir información del comprador
     createElement(recibo, 'comprador', this.userEmail, 1);
     
-    // Crear sección de productos
     const productos = createElement(recibo, 'productos', undefined, 1);
     
     let subtotalGeneral = 0;
     
-    // Añadir cada producto
     this.items.forEach(item => {
         const producto = createElement(productos, 'producto', undefined, 2);
         
@@ -408,35 +383,26 @@ export class CarritoComponent implements OnInit, AfterViewChecked {
         createElement(producto, 'cantidad', item.cantidad.toString(), 3);
         createElement(producto, 'subtotal', subtotalValue.toFixed(2), 3);
         
-        // Cerrar producto con indentación
         producto.appendChild(xmlDoc.createTextNode('\n' + '  '.repeat(2)));
     });
     
-    // Cerrar productos con indentación
     productos.appendChild(xmlDoc.createTextNode('\n' + '  '));
     
-    // Añadir subtotal
     createElement(recibo, 'subtotal', subtotalGeneral.toFixed(2), 1);
     
-    // Añadir impuestos (16% IVA)
     const iva = subtotalGeneral * 0.16;
     createElement(recibo, 'impuestos', iva.toFixed(2), 1);
     
-    // Añadir total con impuestos
     const totalConImpuestos = subtotalGeneral + iva;
     createElement(recibo, 'total', totalConImpuestos.toFixed(2), 1);
     
-    // Cerrar recibo con nueva línea
     recibo.appendChild(xmlDoc.createTextNode('\n'));
     
-    // Serializar a string
     const serializer = new XMLSerializer();
     let xmlString = serializer.serializeToString(xmlDoc);
     
-    // Añadir declaración XML al inicio
     xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n' + xmlString;
     
-    // Para debug
     console.log('XML generado:', xmlString);
     
     return xmlString;

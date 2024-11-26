@@ -35,13 +35,11 @@ export class CatalogoComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarProductos();
-    // Actualizar cada 5 minutos
     setInterval(() => this.cargarProductos(), 300000);
   }
 
   cargarProductos(): void {
     this.catalogoService.getCatalogo().subscribe((data) => {
-      // Filtrar solo productos con stock disponible
       this.productos = data.filter((producto: Producto) => producto.stock > 0);
       this.lastUpdate = new Date();
     });

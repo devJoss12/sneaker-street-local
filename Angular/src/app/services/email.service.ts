@@ -19,7 +19,6 @@ export class EmailService {
 
   constructor(private http: HttpClient) {}
 
-  // Usaremos el mismo endpoint pero enviaremos el XML como parte del payload
   sendOrderConfirmationWithReceipt(orderDetails: OrderDetails): Observable<any> {
     return this.http.post(`${this.apiUrl}/send-order-confirmation`, orderDetails);
   }

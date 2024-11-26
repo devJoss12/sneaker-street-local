@@ -1,4 +1,4 @@
-// auth.service.ts
+
 import { Injectable, inject } from '@angular/core';
 import { 
   Auth, 
@@ -10,7 +10,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  fetchSignInMethodsForEmail
 } from '@angular/fire/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -152,6 +153,16 @@ export class AuthService {
       }
       return result;
     } catch (error: any) {
+      // Manejo específico para errores de login
+      if (error.code === 'auth/wrong-password' || 
+          error.code === 'auth/user-not-found' ||
+          error.code === 'auth/invalid-credential' ||
+          error.code === 'auth/invalid-login-credentials') {
+        throw {
+          code: error.code,
+          message: 'Correo o contraseña incorrectos'
+        };
+      }
       this.handleAuthError(error);
       throw error;
     }
@@ -159,16 +170,13 @@ export class AuthService {
 
   async checkEmailExists(email: string): Promise<boolean> {
     try {
-      await signInWithEmailAndPassword(this.auth, email, 'dummyPassword123!@#');
-      return true;
+      await sendPasswordResetEmail(this.auth, email);
+      return true; 
     } catch (error: any) {
-      if (error.code === 'auth/wrong-password') {
-        return true; // El email existe pero la contraseña es incorrecta
+      if (error.code === 'auth/user-not-found') {
+        return false; 
       }
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-        return false; // El email no existe
-      }
-      throw error; // Otros errores
+      return true;
     }
   }
 
@@ -181,26 +189,19 @@ export class AuthService {
     }
 
     try {
-      const emailExists = await this.checkEmailExists(email);
-      
-      if (!emailExists) {
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (error: any) {
+      if (error.code === 'auth/user-not-found') {
         throw {
           code: 'auth/user-not-found',
           message: 'El correo electrónico no está registrado'
         };
       }
-
-      await sendPasswordResetEmail(this.auth, email);
-    } catch (error: any) {
       if (error.code === 'auth/too-many-requests') {
         throw {
           code: 'auth/too-many-requests',
           message: 'Demasiados intentos. Por favor, intente más tarde'
         };
-      }
-      // Si el error ya tiene un mensaje personalizado, lo mantenemos
-      if (error.message) {
-        throw error;
       }
       this.handleAuthError(error);
     }
@@ -218,13 +219,6 @@ export class AuthService {
       case 'auth/weak-password':
         message = 'La contraseña debe tener al menos 6 caracteres';
         break;
-      case 'auth/user-not-found':
-      case 'auth/invalid-credential':
-        message = 'El correo electrónico no está registrado';
-        break;
-      case 'auth/wrong-password':
-        message = 'Contraseña incorrecta';
-        break;
       case 'auth/invalid-email':
         message = 'El formato del correo electrónico no es válido';
         break;
@@ -237,7 +231,7 @@ export class AuthService {
     console.error(message, error);
     throw { ...error, message };
   }
-
+  
   async logout(): Promise<void> {
     try {
       await signOut(this.auth);

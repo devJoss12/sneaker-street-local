@@ -1,4 +1,4 @@
-/* Header */
+
 .main-header {
   display: flex;
   justify-content: space-between;
@@ -13,24 +13,24 @@
 }
 
 .logo {
-  margin-right: auto;  /* Logo alineado a la izquierda */
+  margin-right: auto;  
 }
 
 .logo a {
   font-size: 1.8em;
   font-weight: bold;
   color: #e74c3c;
-  text-decoration: none;  /* Sin subrayado */
+  text-decoration: none;  
 }
 
 .logo a:hover {
-  color: #e74c3c;  /* El color no cambia al pasar el cursor */
+  color: #e74c3c; 
 }
 
 
 .main-nav {
   flex: 1;
-  text-align: center; /* Centrar el contenido de navegación */
+  text-align: center; 
 }
 
 .main-nav ul {
@@ -41,14 +41,14 @@
 
 .main-nav ul li a {
   font-size: 1.2em;
-  color: #ffffff; /* Cambiado a blanco */
+  color: #ffffff; 
   text-decoration: none;
   display: flex;
   align-items: center;
 }
 
 .main-nav ul li a:hover {
-  color: #ff3366; /* El color rosa al hover */
+  color: #ff3366; 
 }
 
 .icon {
@@ -56,7 +56,6 @@
   font-size: 1.5em;
 }
 
-/* header.component.css */
 .user-info {
   display: flex;
   align-items: center;
@@ -88,7 +87,7 @@
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ff3366; /* Color rosa que usas en tu logo */
+  border: 2px solid #ff3366; 
 }
 
 .user-name {
@@ -175,7 +174,7 @@
 }
 
 .nav-link {
-  color: #ffffff; /* Asegurando que el color sea blanco */
+  color: #ffffff; 
   text-decoration: none;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
@@ -255,12 +254,11 @@
 .admin-panel {
   padding: 20px;
   margin: 20px;
-  margin-top: 80px; /* Añade margen superior para evitar superposición con el header */
+  margin-top: 80px; 
   background: #f5f5f5;
   border-radius: 8px;
 }
 
-/* El resto de tus estilos del admin panel permanecen igual */
 .admin-options {
   display: flex;
   gap: 15px;

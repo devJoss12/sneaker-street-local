@@ -5,12 +5,10 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const app = express();
 
-// Aumentar el límite del body parser para manejar el XML
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
-// Configuración del transportador de correo
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -19,7 +17,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Endpoint para Stripe (sin cambios)
 app.post('/charge', async (req, res) => {
   try {
     let { token, amount } = req.body;
@@ -36,7 +33,6 @@ app.post('/charge', async (req, res) => {
   }
 });
 
-// Endpoint actualizado para el envío de correo
 app.post('/send-order-confirmation', async (req, res) => {
   try {
     const { orderNumber, items, total, userEmail, date, reciboXML } = req.body;
@@ -44,11 +40,9 @@ app.post('/send-order-confirmation', async (req, res) => {
     console.log('Recibiendo solicitud de envío de correo');
     console.log('XML recibido:', reciboXML ? 'Sí' : 'No');
     
-    // Preparar los adjuntos
     const attachments = [];
     
     if (reciboXML) {
-      // Asegurar que el XML tenga la codificación correcta
       const xmlBuffer = Buffer.from(reciboXML, 'utf-8');
       
       attachments.push({

@@ -46,7 +46,6 @@
           Proceder al Pago
         </button>
       
-        <!-- Modal de Confirmación -->
         <app-order-confirmation
           [isVisible]="showConfirmationModal"
           [items]="items"
@@ -55,11 +54,9 @@
           (onCancel)="cancelarConfirmacion()">
         </app-order-confirmation>
       
-        <!-- Formulario de Pago existente -->
         <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
           <form id="payment-form">
             <div id="card-element">
-              <!-- Stripe Card Element -->
             </div>
             <button 
               (click)="procesarPago($event)" 

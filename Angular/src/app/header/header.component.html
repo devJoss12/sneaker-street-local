@@ -6,7 +6,6 @@
     <nav class="main-nav">
       <ul class="nav-list">
         <ng-container *ngIf="authService.user$ | async as user">
-          <!-- Mostrar Panel Admin solo para administradores -->
           <ng-container *ngIf="authService.isAdmin() | async">
             <li>
               <a routerLink="/admin" class="nav-link">
@@ -15,7 +14,6 @@
             </li>
           </ng-container>
 
-          <!-- Mostrar Catálogo y Carrito solo para usuarios no administradores -->
           <ng-container *ngIf="(authService.isAdmin() | async) === false">
             <li>
               <a routerLink="/catalogo" class="nav-link">
@@ -29,7 +27,6 @@
             </li>
           </ng-container>
 
-          <!-- Perfil de usuario y botón de cerrar sesión -->
           <li>
             <div class="user-profile">
               <div class="user-info">
@@ -54,7 +51,6 @@
           </li>
         </ng-container>
 
-        <!-- Botón de login para usuarios no autenticados -->
         <ng-container *ngIf="!(authService.user$ | async)">
           <li>
             <button class="login-btn" routerLink="/auth">
