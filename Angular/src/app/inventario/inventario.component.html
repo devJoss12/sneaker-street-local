@@ -44,14 +44,28 @@
 
         <div class="form-group">
           <label for="imagen">Imagen:</label>
-          <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*">
+          <input 
+            type="file" 
+            id="imagen" 
+            (change)="onFileSelected($event)" 
+            accept="image/*"
+            [class.error]="!archivoSeleccionado && !modoEdicion">
+          <div class="error-message" *ngIf="!archivoSeleccionado && !modoEdicion">
+            La imagen es requerida
+          </div>
         </div>
-
+        
         <div class="form-actions">
-          <button type="submit" [disabled]="!productoForm.valid" class="btn-submit">
+          <button 
+            type="submit" 
+            [disabled]="!esFormularioValido()" 
+            class="btn-submit">
             {{ modoEdicion ? 'Actualizar' : 'Agregar' }} Producto
           </button>
-          <button type="button" (click)="resetForm()" class="btn-cancel">
+          <button 
+            type="button" 
+            (click)="resetForm()" 
+            class="btn-cancel">
             Cancelar
           </button>
         </div>

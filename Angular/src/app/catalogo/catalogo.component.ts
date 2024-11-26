@@ -26,6 +26,7 @@ export class CatalogoComponent implements OnInit {
   productosComprados: Set<number> = new Set();
   cantidadCarrito: number = 0;
   mostrarPopup: boolean = false;
+  lastUpdate: Date = new Date();
 
   constructor(
     private catalogoService: CatalogoService, 
@@ -33,50 +34,39 @@ export class CatalogoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.cargarProductos();
+    // Actualizar cada 5 minutos
+    setInterval(() => this.cargarProductos(), 300000);
+  }
+
+  cargarProductos(): void {
     this.catalogoService.getCatalogo().subscribe((data) => {
-      this.productos = data;
-      console.log('Productos y sus stocks:', this.productos.map(p => ({
-        nombre: p.nombre,
-        stock: p.stock
-      })));
+      // Filtrar solo productos con stock disponible
+      this.productos = data.filter((producto: Producto) => producto.stock > 0);
+      this.lastUpdate = new Date();
     });
   }
 
   tieneStock(producto: Producto): boolean {
-    return producto.stock !== null && producto.stock !== undefined && producto.stock > 0;
+    return producto.stock > 0;
   }
 
   getButtonBackground(producto: Producto): string {
     if (this.esProductoComprado(producto.id)) {
       return 'gray';
     }
-    if (!this.tieneStock(producto)) {
-      return '#6c757d';
-    }
     return 'linear-gradient(45deg, #ff3366, #ff6b3d)';
   }
 
   getButtonCursor(producto: Producto): string {
-    if (this.esProductoComprado(producto.id) || !this.tieneStock(producto)) {
-      return 'not-allowed';
-    }
-    return 'pointer';
+    return this.esProductoComprado(producto.id) ? 'not-allowed' : 'pointer';
   }
 
   getButtonText(producto: Producto): string {
-    if (this.esProductoComprado(producto.id)) {
-      return 'Agregado';
-    }
-    if (!this.tieneStock(producto)) {
-      return 'No Disponible';
-    }
-    return 'Agregar';
+    return this.esProductoComprado(producto.id) ? 'Agregado' : 'Agregar';
   }
 
   agregarAlCarrito(producto: Producto) {
-    if (!this.tieneStock(producto)) {
-      return;
-    }
     this.carritoService.addToCart(producto);
     this.productosComprados.add(producto.id);
     this.cantidadCarrito = this.carritoService.getItems().length;
@@ -92,5 +82,9 @@ export class CatalogoComponent implements OnInit {
     setTimeout(() => {
       this.mostrarPopup = false;
     }, 2000);
+  }
+
+  formatLastUpdate(): string {
+    return this.lastUpdate.toLocaleTimeString();
   }
 }

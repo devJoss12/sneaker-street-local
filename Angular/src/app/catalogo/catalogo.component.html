@@ -8,16 +8,26 @@
     <span style="content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 3px; background: linear-gradient(45deg, #ff3366, #ff6b3d);"></span>
   </h2>
 
+  <div class="last-update" style="text-align: center; margin-bottom: 20px; color: #666;">
+    Última actualización: {{ formatLastUpdate() }}
+  </div>
+
   <div *ngIf="productos.length > 0; else noHayProductos" class="product-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto;">
     <div class="product-card" *ngFor="let producto of productos" style="background-color: #fff; border: none; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+      <div class="disponibilidad-badge" style="position: absolute; top: 10px; right: 10px; background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.8em;">
+        Producto disponible
+      </div>
       <img [src]="producto.url_imagen" alt="{{ producto.nombre }}" class="product-image" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 15px; border-radius: 8px;">
       <div class="product-details" style="padding: 0 10px;">
         <p class="product-color" style="font-size: 0.9em; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">{{ producto.descripcion }}</p>
         <h3 class="product-name" style="font-size: 1.4em; margin: 10px 0; font-weight: 600; color: #333;">{{ producto.nombre }}</h3>
         <p class="product-price" style="font-size: 1.2em; font-weight: bold; color: #ff3366; margin-bottom: 15px;">${{ producto.precio }}</p>
+        <p class="stock-info" style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+          Stock: {{ producto.stock }} unidades
+        </p>
         <button
           (click)="agregarAlCarrito(producto)"
-          [disabled]="esProductoComprado(producto.id) || !tieneStock(producto)"
+          [disabled]="esProductoComprado(producto.id)"
           [ngStyle]="{
             'background': getButtonBackground(producto),
             'cursor': getButtonCursor(producto)
@@ -42,6 +52,10 @@
     box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
   }
   
+  .product-card {
+    position: relative;
+  }
+
   @media (max-width: 768px) {
     .catalogo-content {
       padding: 40px 10px;
@@ -49,40 +63,47 @@
     .catalogo-content > div {
       padding: 20px;
     }
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
-.popup-carrito {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: linear-gradient(45deg, #ff3366, #ff6b3d);
-  color: white;
-  padding: 15px 25px;
-  border-radius: 30px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  z-index: 1000;
-  opacity: 0;
-  animation: fadeInOut 2s ease-in-out;
-}
+  @media (max-width: 480px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 
-@keyframes fadeInOut {
-  0% {
+  .popup-carrito {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #ff3366, #ff6b3d);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000;
     opacity: 0;
-    transform: translateY(-20px);
+    animation: fadeInOut 2s ease-in-out;
   }
-  10%, 90% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-}
 
-
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    10%, 90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
 </style>

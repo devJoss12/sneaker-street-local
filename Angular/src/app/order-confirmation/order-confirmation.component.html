@@ -1,0 +1,31 @@
+<div *ngIf="isVisible" class="modal-overlay">
+    <div class="modal-content">
+      <h2 class="modal-title">Confirmar Pedido</h2>
+      <div class="order-details">
+        <h3>Resumen del pedido</h3>
+        
+        <div class="items-container">
+          <div *ngFor="let item of items" class="item-row">
+            <div class="item-image">
+              <img [src]="item.url_imagen" [alt]="item.nombre">
+            </div>
+            <div class="item-info">
+              <h4>{{item.nombre}}</h4>
+              <p>Cantidad: {{item.cantidad}}</p>
+              <p>Precio unitario: ${{item.precio}}</p>
+              <p>Subtotal: ${{item.precio * item.cantidad | number:'1.2-2'}}</p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="total-section">
+          <h3>Total a pagar: ${{total | number:'1.2-2'}}</h3>
+        </div>
+      </div>
+  
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="onCancel.emit()">Cancelar</button>
+        <button class="confirm-btn" (click)="onConfirm.emit()">Confirmar Pedido</button>
+      </div>
+    </div>
+  </div>

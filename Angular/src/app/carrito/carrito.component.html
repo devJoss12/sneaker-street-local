@@ -8,40 +8,72 @@
     
     <div *ngIf="items.length > 0; else noItems">
       <div *ngFor="let item of items; let i = index" style="margin-bottom: 20px; padding: 20px; border-radius: 8px; background-color: #f9f9f9; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center; flex: 1;">
           <img [src]="item.url_imagen" alt="{{ item.nombre }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
-          <div>
+          <div style="flex: 1;">
             <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; color: #333; margin: 0;">{{ item.nombre }}</p>
             <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.1em; color: #ff3366; margin: 5px 0 0 0;">${{ item.precio | number: '1.2-2' }}</p>
+            <p style="font-size: 0.9em; color: #666;">Stock disponible: {{ item.stock }}</p>
           </div>
         </div>
-        <button (click)="eliminarProducto(i)" style="background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.9em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;">
-          Eliminar
-        </button>
-      </div>
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eaeaea; display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #333;">Total:</h3>
-        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #ff3366;">${{ total | number: '1.2-2' }}</p>
-      </div>
-      <button (click)="mostrarFormularioPago()" style="display: block; width: 100%; margin-top: 30px; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
-        Proceder al Pago
-      </button>
-      
-      <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
-        <form id="payment-form">
-          <div id="card-element"><!-- Elemento de tarjeta será montado aquí --></div>
-          <button (click)="procesarPago($event)" style="display: block; width: 100%; margin-top: 20px; padding: 15px; background: linear-gradient(45deg, #4caf50, #81c784); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
-            Pagar Ahora
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div style="display: flex; align-items: center;">
+            <label style="margin-right: 10px; color: #666;">Cantidad:</label>
+            <input 
+              type="number" 
+              [value]="item.cantidad"
+              (change)="actualizarCantidad(i, $event)"
+              min="1"
+              [max]="item.stock"
+              style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; text-align: center;"
+            >
+          </div>
+          <button (click)="eliminarProducto(i)" style="background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.9em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;">
+            Eliminar
           </button>
-        </form>
+        </div>
       </div>
+
+      <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eaeaea;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #333;">Total:</h3>
+          <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.8em; font-weight: 700; color: #ff3366;">${{ total | number: '1.2-2' }}</p>
+        </div>
+        
+        <button 
+          (click)="mostrarFormularioPago()" 
+          style="display: block; width: 100%; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
+          Proceder al Pago
+        </button>
       
+        <!-- Modal de Confirmación -->
+        <app-order-confirmation
+          [isVisible]="showConfirmationModal"
+          [items]="items"
+          [total]="total"
+          (onConfirm)="confirmarPedido()"
+          (onCancel)="cancelarConfirmacion()">
+        </app-order-confirmation>
       
+        <!-- Formulario de Pago existente -->
+        <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
+          <form id="payment-form">
+            <div id="card-element">
+              <!-- Stripe Card Element -->
+            </div>
+            <button 
+              (click)="procesarPago($event)" 
+              style="display: block; width: 100%; margin-top: 20px; padding: 15px; background: linear-gradient(45deg, #4caf50, #81c784); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px;">
+              Pagar Ahora
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
     
     <ng-template #noItems>
       <p style="text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.2em; color: #666; font-style: italic; margin-top: 40px;">El carrito está vacío.</p>
-      <a href="catalogo" style="display: block; width: 200px; margin: 30px auto 0; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; text-align: center; text-decoration: none;">
+      <a routerLink="/catalogo" style="display: block; width: 200px; margin: 30px auto 0; padding: 15px; background: linear-gradient(45deg, #ff3366, #ff6b3d); color: white; border: none; border-radius: 30px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1em; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; text-align: center; text-decoration: none;">
         Ver Catálogo
       </a>
     </ng-template>
@@ -51,7 +83,6 @@
 <app-footer></app-footer>
 
 <style>
-  /* Estilos adicionales para mejorar la interactividad */
   .carrito-content button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
@@ -65,6 +96,4 @@
       padding: 20px;
     }
   }
-
-
 </style>

@@ -43,7 +43,7 @@ export class InventarioComponent implements OnInit {
       descripcion: ['', Validators.required],
       precio: ['', [Validators.required, Validators.min(0)]],
       stock: ['', [Validators.required, Validators.min(0)]],
-      imagen: ['']
+      imagen: [null] 
     });
   }
 
@@ -75,9 +75,15 @@ export class InventarioComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.productoForm.valid) {
+    if (this.productoForm.valid) { // Solo verificamos el formulario base
       try {
         let urlImagen = this.productoSeleccionado?.url_imagen || '';
+        
+        // Si estamos en modo creación, requerimos la imagen
+        if (!this.modoEdicion && !this.archivoSeleccionado) {
+          this.mostrarError('Por favor, selecciona una imagen para el producto');
+          return;
+        }
         
         if (this.archivoSeleccionado) {
           try {
@@ -106,6 +112,7 @@ export class InventarioComponent implements OnInit {
               this.mostrarMensajeExito('Producto actualizado correctamente');
               this.resetForm();
               this.cargarInventario();
+              this.mostrarFormulario = false;
             },
             error: (error) => {
               console.error('Error al actualizar producto:', error);
@@ -113,11 +120,17 @@ export class InventarioComponent implements OnInit {
             }
           });
         } else {
+          if (!urlImagen) {
+            this.mostrarError('Error: No se pudo obtener la URL de la imagen');
+            return;
+          }
+          
           this.inventarioService.crearProducto(productoData).subscribe({
             next: (response) => {
               this.mostrarMensajeExito('Producto creado correctamente');
               this.resetForm();
               this.cargarInventario();
+              this.mostrarFormulario = false;
             },
             error: (error) => {
               console.error('Error al crear producto:', error);
@@ -129,12 +142,17 @@ export class InventarioComponent implements OnInit {
         console.error('Error en el formulario:', error);
         this.mostrarError('Error al procesar el formulario');
       }
+    } else {
+      this.mostrarError('Por favor, completa todos los campos requeridos');
     }
   }
+
   onFileSelected(event: Event): void {
     const element = event.target as HTMLInputElement;
     if (element.files?.length) {
       this.archivoSeleccionado = element.files[0];
+    } else {
+      this.archivoSeleccionado = null;
     }
   }
 
@@ -145,8 +163,10 @@ export class InventarioComponent implements OnInit {
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: producto.precio,
-      stock: producto.stock
+      stock: producto.stock,
+      imagen: null // Reset the image field
     });
+    this.archivoSeleccionado = null; // Reset the selected file
     this.mostrarFormulario = true;
   }
 
@@ -156,6 +176,15 @@ export class InventarioComponent implements OnInit {
     this.productoSeleccionado = null;
     this.archivoSeleccionado = null;
     this.mostrarFormulario = false;
+  }
+
+  // Actualizar el template para usar esta función
+  esFormularioValido(): boolean {
+    if (this.modoEdicion) {
+      return this.productoForm.valid;
+    } else {
+      return this.productoForm.valid && this.archivoSeleccionado !== null;
+    }
   }
 
   eliminarProducto(id: number): void {
@@ -218,5 +247,9 @@ export class InventarioComponent implements OnInit {
         });
       }
     });
+  }
+
+  get formularioCompleto(): boolean {
+    return this.productoForm.valid && this.archivoSeleccionado !== null;
   }
 }

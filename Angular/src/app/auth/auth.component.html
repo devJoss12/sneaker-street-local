@@ -6,6 +6,9 @@
       
       <div *ngIf="!isRegistering">
         <p>Accede a tu cuenta</p>
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
         <div class="form-group">
           <input type="email" [(ngModel)]="email" placeholder="Email" class="auth-input">
         </div>

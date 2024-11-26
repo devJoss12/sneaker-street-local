@@ -28,7 +28,6 @@ export class AuthComponent {
   }
 
   private validatePassword(password: string): boolean {
-    // Mínimo 8 caracteres, al menos una letra y un número
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordRegex.test(password);
   }
@@ -92,17 +91,25 @@ export class AuthComponent {
   }
 
   async forgotPassword() {
-    if (!this.email) {
+    this.errorMessage = ''; // Limpiamos el mensaje de error previo
+    
+    if (!this.email || this.email.trim() === '') {
       this.errorMessage = 'Por favor, ingrese su correo electrónico';
       return;
     }
+
+    if (!this.validateEmail(this.email)) {
+      this.errorMessage = 'Por favor, ingrese un correo electrónico válido';
+      return;
+    }
+
     try {
       this.isLoading = true;
-      this.errorMessage = '';
       await this.authService.resetPassword(this.email);
       alert('Se ha enviado un correo para restablecer su contraseña');
     } catch (error: any) {
-      this.errorMessage = error.message;
+      this.errorMessage = error.message || 'Error al intentar restablecer la contraseña';
+      console.error('Error en resetPassword:', error);
     } finally {
       this.isLoading = false;
     }

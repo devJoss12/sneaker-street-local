@@ -17,6 +17,7 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UsersService } from './users.service';
 
+
 export interface AuthError {
   code: string;
   message: string;
@@ -156,18 +157,61 @@ export class AuthService {
     }
   }
 
-  async resetPassword(email: string): Promise<void> {
+  async checkEmailExists(email: string): Promise<boolean> {
     try {
-      await sendPasswordResetEmail(this.auth, email);
+      await signInWithEmailAndPassword(this.auth, email, 'dummyPassword123!@#');
+      return true;
     } catch (error: any) {
-      this.handleAuthError(error);
-      throw error;
+      if (error.code === 'auth/wrong-password') {
+        return true; // El email existe pero la contraseña es incorrecta
+      }
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        return false; // El email no existe
+      }
+      throw error; // Otros errores
     }
   }
 
-  private handleAuthError(error: AuthError): void {
+  async resetPassword(email: string): Promise<void> {
+    if (!email || email.trim() === '') {
+      throw {
+        code: 'auth/missing-email',
+        message: 'Por favor, ingrese su correo electrónico'
+      };
+    }
+
+    try {
+      const emailExists = await this.checkEmailExists(email);
+      
+      if (!emailExists) {
+        throw {
+          code: 'auth/user-not-found',
+          message: 'El correo electrónico no está registrado'
+        };
+      }
+
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (error: any) {
+      if (error.code === 'auth/too-many-requests') {
+        throw {
+          code: 'auth/too-many-requests',
+          message: 'Demasiados intentos. Por favor, intente más tarde'
+        };
+      }
+      // Si el error ya tiene un mensaje personalizado, lo mantenemos
+      if (error.message) {
+        throw error;
+      }
+      this.handleAuthError(error);
+    }
+  }
+
+  private handleAuthError(error: any): void {
     let message = '';
     switch (error.code) {
+      case 'auth/missing-email':
+        message = 'Por favor, ingrese su correo electrónico';
+        break;
       case 'auth/email-already-in-use':
         message = 'Este correo electrónico ya está registrado';
         break;
@@ -175,10 +219,17 @@ export class AuthService {
         message = 'La contraseña debe tener al menos 6 caracteres';
         break;
       case 'auth/user-not-found':
-        message = 'No existe una cuenta con este correo electrónico';
+      case 'auth/invalid-credential':
+        message = 'El correo electrónico no está registrado';
         break;
       case 'auth/wrong-password':
         message = 'Contraseña incorrecta';
+        break;
+      case 'auth/invalid-email':
+        message = 'El formato del correo electrónico no es válido';
+        break;
+      case 'auth/too-many-requests':
+        message = 'Demasiados intentos. Por favor, intente más tarde';
         break;
       default:
         message = 'Error en la autenticación';

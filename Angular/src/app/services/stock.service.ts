@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StockService {
   private apiUrl = 'http://localhost/sneaker_street_api/update_stock.php';
+  private checkStockUrl = 'http://localhost/sneaker_street_api/check_stock.php';
 
   constructor(private http: HttpClient) {}
 
@@ -19,16 +20,31 @@ export class StockService {
     );
   }
 
-  prepareStockUpdates(cartItems: any[]): Array<{id: number, quantity: number}> {
-    const updates = cartItems.reduce((acc: { [key: string]: number }, item) => {
-      const id = item.id;
-      acc[id] = (acc[id] || 0) + 1;
-      return acc;
-    }, {});
+  checkStockAvailability(cartItems: any[]): Observable<boolean> {
+    const itemsToCheck = cartItems.map(item => ({
+      id: item.id,
+      quantity: item.cantidad || 1
+    }));
 
-    return Object.entries(updates).map(([id, quantity]) => ({
-      id: parseInt(id),
-      quantity: quantity
+    console.log('Verificando disponibilidad de stock para:', itemsToCheck);
+
+    return this.http.post<any>(this.checkStockUrl, { items: itemsToCheck }).pipe(
+      map(response => {
+        console.log('Respuesta de verificación de stock:', response);
+        return response.available;
+      }),
+      catchError(error => {
+        console.error('Error al verificar el stock:', error);
+        throw error;
+      })
+    );
+  }
+
+  prepareStockUpdates(cartItems: any[]): Array<{id: number, quantity: number}> {
+    // Asegurarnos de que usamos la cantidad correcta de cada item del carrito
+    return cartItems.map(item => ({
+      id: item.id,
+      quantity: item.cantidad || 1 // Si no existe cantidad, asumimos 1
     }));
   }
 }
